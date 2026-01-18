@@ -1,24 +1,24 @@
 <!DOCTYPE html>
+background: #000000;
+color: #ffffff;
+width: 220px;
+max-width: 90vw;
+}
+
+
 button.secondary {
 background: #f0f0f0;
 color: #000000;
 }
 </style>
 </head>
+
+
 <body>
 <div class="wrapper">
-<style>
-@media (max-width: 600px) {
-.wrapper {
-padding: 16px;
-}
-button {
-width: 100%;
-max-width: 320px;
-}
-}
-</style>
 <canvas id="canvas" width="600" height="600"></canvas>
+
+
 <button onclick="generateShard()">Get a piece</button>
 <button class="secondary" onclick="downloadImage()">Download</button>
 </div>
@@ -30,7 +30,7 @@ const ctx = canvas.getContext('2d');
 
 
 const background = new Image();
-background.src = 'background.png'; // положи файл фона рядом с index.html
+background.src = 'background.png'; // файл фона рядом с index.html
 
 
 function random(min, max) {
@@ -38,17 +38,21 @@ return Math.random() * (max - min) + min;
 }
 
 
-function generateShard() {
+function drawBackground() {
 ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-
-// фон
 ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+}
 
 
-// центр безопасной зоны (между надписями)
+function generateShard() {
+if (!background.complete) return;
+
+
+drawBackground();
+
+
 const cx = canvas.width / 2;
-const cy = canvas.height / 2 + 20;
+const cy = canvas.height / 2;
 
 
 const pointsCount = Math.floor(random(6, 14));
@@ -71,7 +75,7 @@ ctx.beginPath();
 
 
 angles.forEach((angle, i) => {
-const radius = random(90, 180) * random(0.6, 1.1);
+const radius = random(90, 180) * random(0.7, 1.1);
 const x = Math.cos(angle) * radius;
 const y = Math.sin(angle) * radius;
 
@@ -92,7 +96,7 @@ ctx.restore();
 
 function downloadImage() {
 const link = document.createElement('a');
-link.download = 'weird-piece.png';
+link.download = 'piece.png';
 link.href = canvas.toDataURL('image/png');
 link.click();
 }
